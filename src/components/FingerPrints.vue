@@ -60,10 +60,7 @@ export default defineComponent({
   },
   setup(props) {
     onMounted(() => {
-      var body = $("body");
-      var clone = $(".jb #" + fingerId1);
       var successIcon = $(".success");
-      var fingerprint = $(".fingerprint");
 
       var finishedDrawing = function () {
         var drawStatus = animation.getStatus();

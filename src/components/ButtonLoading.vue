@@ -221,7 +221,7 @@ export default defineComponent({
         }
       });
 
-      sequins.forEach((sequin, index) => {
+      sequins.forEach((sequin, index)  => {
         // move canvas to position
         ctx.translate(sequin.position.x, sequin.position.y);
 
@@ -325,7 +325,7 @@ export default defineComponent({
 }
 
 canvas {
-  height: 100vh;
+  height: 100%;
   pointer-events: none;
   position: absolute;
   width: 100%;
