@@ -9,7 +9,7 @@
       </div>
     </div>
     <div>
-      <button-loading />
+      <button-loading :isOk="isOk"/>
     </div>
   </div>
 </template>
@@ -34,6 +34,7 @@ export default {
       twoFingers: [false, false],
       time: {},
       text: "",
+      isOk: false
     };
   },
   methods: {
@@ -71,6 +72,9 @@ export default {
       $finger.css("left", e.changedTouches[0].clientX - 50);
       $finger.show();
       emitter.emit("fingerStart", hasOne + 1);
+      if(hasOne >= 1) {
+        this.isOk = true
+      }
     });
 
     $(".container").on("touchend", (e) => {

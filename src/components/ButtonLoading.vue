@@ -6,7 +6,7 @@
           <polyline stroke="currentColor" points="2,7.1 6.5,11.1 11,7.1 " />
           <line stroke="currentColor" x1="6.5" y1="1.2" x2="6.5" y2="10.3" />
         </svg>
-        <span class="button-text">Submit</span>
+        <span class="button-text first">请按下你们的指印</span>
       </div>
 
       <div class="message loadingMessage">
@@ -21,7 +21,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 11">
           <polyline stroke="currentColor" points="1.4,5.8 5.1,9.5 11.6,2.1 " />
         </svg>
-        <span class="button-text">Success</span>
+        <span class="button-text">结婚快乐</span>
       </div>
     </button>
 
@@ -31,9 +31,14 @@
 
 <script>
 import { defineComponent, onMounted } from "vue";
+import $ from "jquery";
+import { ElNotification } from "element-plus";
 
 export default defineComponent({
-  setup() {
+  props: {
+    isOk: Boolean,
+  },
+  setup(props) {
     // helper function to pick a random number within a range
     const randomRange = (min, max) => Math.random() * (max - min) + min;
     // init other global elements
@@ -129,13 +134,23 @@ export default defineComponent({
     var disabled = false;
     // cycle through button states when clicked
     const clickButton = () => {
+      if (!props.isOk) {
+        // console.log(ElNotification)
+        ElNotification.warning({
+          title: "有点问题哦",
+          message: "在下面空白的地方按下你们的手指印",
+          showClose: false,
+        });
+        return;
+      }
       const button = document.getElementById("button");
-      
+
       if (!disabled) {
         disabled = true;
         // Loading stage
         button.classList.add("loading");
         button.classList.remove("ready");
+
         setTimeout(() => {
           // Completed stage
           button.classList.add("complete");
@@ -143,6 +158,8 @@ export default defineComponent({
           setTimeout(() => {
             initBurst();
             setTimeout(() => {
+              $(".first").text("再欣赏一次礼花");
+              reset();
               // Reset button so user can select it again
               disabled = false;
               button.classList.add("ready");
@@ -221,7 +238,7 @@ export default defineComponent({
         }
       });
 
-      sequins.forEach((sequin, index)  => {
+      sequins.forEach((sequin, index) => {
         // move canvas to position
         ctx.translate(sequin.position.x, sequin.position.y);
 
@@ -284,6 +301,14 @@ export default defineComponent({
         cy = ctx.canvas.height / 2;
       };
 
+      reset();
+
+      // kick off the render loop
+      initBurst();
+      render();
+    });
+
+    const reset = () => {
       // Set up button text transition timings on page load
       let textElements = button.querySelectorAll(".button-text");
       textElements.forEach((element) => {
@@ -298,11 +323,7 @@ export default defineComponent({
         });
         element.innerHTML = characterHTML;
       });
-
-      // kick off the render loop
-      initBurst();
-      render();
-    });
+    };
 
     return {
       clickButton,
@@ -501,5 +522,4 @@ button.complete {
 .loadingCircle:nth-child(3) {
   animation-delay: 0.2s;
 }
-
 </style>
