@@ -108,7 +108,7 @@ export default defineComponent({
 }
 
 .fingerprint {
-  width: 200px;
+  width: 80px;
   z-index: 9;
   cursor: grab;
 }

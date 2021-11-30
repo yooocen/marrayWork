@@ -155,6 +155,8 @@ export default defineComponent({
           // Completed stage
           button.classList.add("complete");
           button.classList.remove("loading");
+
+          $('.paper').addClass('fadeIn')
           setTimeout(() => {
             initBurst();
             setTimeout(() => {
@@ -350,7 +352,7 @@ canvas {
   pointer-events: none;
   position: absolute;
   width: 100%;
-  z-index: 2;
+  z-index: 13;
   left: 0;
   top: 0;
 }
@@ -368,11 +370,11 @@ button {
   overflow: hidden;
   padding: 0 10px;
   position: absolute;
-  top: 50%;
+  top: 86%;
   transform: translate(-50%, -50%);
   width: 190px;
   -webkit-tap-highlight-color: transparent;
-  z-index: 1;
+  z-index: 12;
 
   &::before {
     background: #1f2335;
