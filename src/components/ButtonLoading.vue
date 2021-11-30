@@ -33,6 +33,8 @@
 import { defineComponent, onMounted } from "vue";
 import $ from "jquery";
 import { ElNotification } from "element-plus";
+import emitter from "tiny-emitter/instance";
+
 
 export default defineComponent({
   props: {
@@ -286,6 +288,10 @@ export default defineComponent({
       window.addEventListener("resize", () => {
         resizeCanvas();
       });
+
+      emitter.on("isSet", ()=>{
+        clickButton();
+      })
 
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");

@@ -3,13 +3,14 @@
     <div class="paper container">
       <div class="lines">
         <div class="text" contenteditable spellcheck="false">
-          
-          <img :src="image" 
-            class="love-img"
-          />
+          <img :src="image" class="love-img" />
 
-          <img class="word" src="../assets/word.png"/>
-          <div class="date">C & C 2021.12.2</div>
+          <img class="word" src="../assets/word.png" />
+          <div class="date"><span>C & C</span><span style="margin-left: 20px">2021.12.2</span></div>
+          <img class="code" src="../assets/code.png" />
+          <!-- <div class="shu one">辛丑牛年</div>
+          <div class="shu two">己亥月甲申日</div>
+          <div class="shu three">十月廿八</div> -->
         </div>
       </div>
     </div>
@@ -44,7 +45,7 @@ export default {
     ButtonLoading,
   },
   data() {
-    
+
     return {
       posMap: {},
       twoFingers: [false, false],
@@ -56,6 +57,13 @@ export default {
   },
   methods: {
     fun() {},
+  },
+  watch() {
+    isOk : {
+      handler : (newName, oldName) => {
+      　　emitter.emit("isSet", newName)
+    　　}
+    }
   },
   mounted() {
     const self = this;
@@ -92,7 +100,10 @@ export default {
       $finger.show();
       emitter.emit("fingerStart", hasOne + 1);
       if (hasOne >= 1) {
-        this.isOk = true;
+        self.isOk = true;
+        setTimeout(()=>{
+          emitter.emit("isSet", true)
+        }, 1500)
       }
     });
 
@@ -150,7 +161,6 @@ export default {
   margin: -300px 0 0 -400px;
 }
 
-
 /* .text {
   position: absolute;
   top: 65px;
@@ -162,7 +172,6 @@ export default {
   overflow: hidden;
   outline: none;
 } */
-
 
 .fadeIn {
   opacity: 100;
@@ -179,14 +188,45 @@ export default {
   display: block;
 }
 
-.word{
-  margin-left: 130px;
+.word {
+  margin-left: 110px;
   margin-top: 0px;
   width: 400px;
   height: 84px;
 }
 
+.code {
+  position: absolute;
+  top: 450px;
+  right: 170px;
+  width: 80px;
+  height: 80px;
+}
+
 .date {
-  margin-left: 510px;
+  margin-top: -30px;
+  margin-left:495px;
+}
+
+.shu {
+  color: white;
+  position: absolute;
+  top: 70px;
+  width: 16px;
+  border-left: 1px solid white;
+  font-weight: bold;
+  font-size: medium;
+}
+
+.one {
+ right: 190px;
+}
+
+.two {
+  right: 215px;
+}
+
+.three {
+  right: 240px;
 }
 </style>
