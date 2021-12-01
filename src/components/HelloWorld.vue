@@ -4,10 +4,13 @@
       <div class="lines">
         <div class="text" contenteditable spellcheck="false">
           <img :src="image" class="love-img" />
-
+          <div id="qr"> </div>
           <img class="word" src="../assets/word.png" />
-          <div class="date"><span>C & C</span><span style="margin-left: 20px">2021.12.2</span></div>
-          <img class="code" src="../assets/code.png" />
+          <div class="date">
+            <span>C & C</span><span style="margin-left: 20px">2021.12.2</span>
+          </div>
+          <img className="qrlove" src="../assets/xijieliangyuan.png" />
+          <!-- <img class="code" src="../assets/code.png" /> -->
           <!-- <div class="shu one">辛丑牛年</div>
           <div class="shu two">己亥月甲申日</div>
           <div class="shu three">十月廿八</div> -->
@@ -34,7 +37,8 @@ import $ from "jquery";
 import FingerPrints from "./FingerPrints.vue";
 import ButtonLoading from "./ButtonLoading.vue";
 import emitter from "tiny-emitter/instance";
-import {image} from "../assets/wechat"
+import { image } from "../assets/wechat";
+var AraleQRCode = require("arale-qrcode");
 export default {
   name: "HelloWorld",
   props: {
@@ -45,27 +49,63 @@ export default {
     ButtonLoading,
   },
   data() {
-
     return {
       posMap: {},
       twoFingers: [false, false],
       time: {},
       text: "",
       isOk: false,
-      image
+      image,
     };
   },
   methods: {
     fun() {},
+    generQR() {
+    var codeFigure = new AraleQRCode({
+      render: "svg", // 生成的类型 'svg' or 'table'
+      text: "哒哒爱璐璐一辈子\n" + this.getDateTime(), // 需要生成二维码的链接
+      size: 120, // 生成二维码大小
+    });
+    return codeFigure;
+  },
+  getDateTime(type) {
+        // 获取当前日期
+        let timestamp = Date.parse(new Date());
+        let date = new Date(timestamp);
+        if (type == 'tomorrow') { // 明天
+            date.setDate(date.getDate() + 1);
+
+        } else if (type == 'today') { // 今天
+            date.setDate(date.getDate());
+        }
+        //获取年份 ?
+        var Y = date.getFullYear();
+        //获取月份 ?
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+        //获取当日日期?
+        var D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+
+        var H = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+
+        var Min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+
+        var S = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        let todayDate = Y + '-' + M + '-' + D + ' ' + H + ':' + Min + ':' + S;
+        return todayDate
+    }
   },
   watch() {
-    isOk : {
-      handler : (newName, oldName) => {
-      　　emitter.emit("isSet", newName)
-    　　}
+    isOk: {
+      handler: (newName, oldName) => {
+        emitter.emit("isSet", newName);
+      };
     }
   },
   mounted() {
+    let qr =this.generQR()
+    qr.class = 'qr';
+    let root = document.getElementById("qr");
+    root.appendChild(qr);
     const self = this;
     $(".container").on("touchstart", (e) => {
       e.preventDefault();
@@ -95,15 +135,15 @@ export default {
       let $finger = $("#f" + (hasOne + 1));
       // let left = $(".paper").css('margin-left')
       // let top = $(".paper").css('margin-top')
-      $finger.css("top", e.changedTouches[0].clientY- 40);
+      $finger.css("top", e.changedTouches[0].clientY - 40);
       $finger.css("left", e.changedTouches[0].clientX - 50);
       $finger.show();
       emitter.emit("fingerStart", hasOne + 1);
       if (hasOne >= 1) {
         self.isOk = true;
-        setTimeout(()=>{
-          emitter.emit("isSet", true)
-        }, 1500)
+        setTimeout(() => {
+          emitter.emit("isSet", true);
+        }, 1500);
       }
     });
 
@@ -128,7 +168,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style  >
 .container {
   height: 100vh;
   width: 100%;
@@ -205,7 +245,7 @@ export default {
 
 .date {
   margin-top: -30px;
-  margin-left:495px;
+  margin-left: 495px;
 }
 
 .shu {
@@ -219,7 +259,7 @@ export default {
 }
 
 .one {
- right: 190px;
+  right: 190px;
 }
 
 .two {
@@ -228,5 +268,25 @@ export default {
 
 .three {
   right: 240px;
+}
+
+#qr {
+  position: absolute;
+  width: 80px ;
+  height: 80px;
+    top: 450px;
+  right: 170px;
+}
+
+#qr svg {
+  width: 80px ;
+  height: 80px;
+}
+
+.qrlove {
+  position: absolute;
+    top: 475px;
+  right: 195px;
+  width: 30px;
 }
 </style>

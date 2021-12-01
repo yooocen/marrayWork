@@ -16,7 +16,8 @@
     "style-resources-loader": "^1.4.1",
     "tiny-emitter": "^2.1.0",
     "vivus": "^0.4.6",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "arale-qrcode": "^3.0.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
