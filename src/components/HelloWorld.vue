@@ -1,292 +1,137 @@
 <template>
-  <div>
-    <div class="paper container">
-      <div class="lines">
-        <div class="text" contenteditable spellcheck="false">
-          <img :src="image" class="love-img" />
-          <div id="qr"> </div>
-          <img class="word" src="../assets/word.png" />
-          <div class="date">
-            <span>C & C</span><span style="margin-left: 20px">2021.12.2</span>
-          </div>
-          <img className="qrlove" src="../assets/xijieliangyuan.png" />
-          <!-- <img class="code" src="../assets/code.png" /> -->
-          <!-- <div class="shu one">辛丑牛年</div>
-          <div class="shu two">己亥月甲申日</div>
-          <div class="shu three">十月廿八</div> -->
-        </div>
+ <div class="bg-wrapper">
+  <div class="envelope-wrapper">
+   <div class="envelope">
+      <div class="card">
+        <span class="fa fa-close close-icon"></span>
+        <div class="text">Love.</div>
       </div>
     </div>
-
-    <div class="container" @touchstart="fun">
-      <div id="f1" class="finger-prints">
-        <finger-prints :fingerId="'1'"></finger-prints>
-      </div>
-      <div id="f2" class="finger-prints">
-        <finger-prints :fingerId="'2'"></finger-prints>
-      </div>
-    </div>
-    <div>
-      <button-loading :isOk="isOk" />
-    </div>
+    <div class="heart"></div>
   </div>
+</div>   
 </template>
 
 <script>
-import $ from "jquery";
-import FingerPrints from "./FingerPrints.vue";
-import ButtonLoading from "./ButtonLoading.vue";
-import emitter from "tiny-emitter/instance";
-import { image } from "../assets/wechat";
-var AraleQRCode = require("arale-qrcode");
+import * as $ from 'jquery';
 export default {
-  name: "HelloWorld",
-  props: {
-    msg: String,
-  },
-  components: {
-    FingerPrints,
-    ButtonLoading,
-  },
-  data() {
-    return {
-      posMap: {},
-      twoFingers: [false, false],
-      time: {},
-      text: "",
-      isOk: false,
-      image,
-    };
-  },
-  methods: {
-    fun() {},
-    generQR() {
-    var codeFigure = new AraleQRCode({
-      render: "svg", // 生成的类型 'svg' or 'table'
-      text: "哒哒爱璐璐一辈子\n" + this.getDateTime(), // 需要生成二维码的链接
-      size: 120, // 生成二维码大小
-    });
-    return codeFigure;
-  },
-  getDateTime(type) {
-        // 获取当前日期
-        let timestamp = Date.parse(new Date());
-        let date = new Date(timestamp);
-        if (type == 'tomorrow') { // 明天
-            date.setDate(date.getDate() + 1);
+  mounted: () => {
+    $( document ).ready(() => {
+    $(".envelope-wrapper .heart").click(() => {
+      $('.envelope-wrapper').addClass('flap')
+  });
 
-        } else if (type == 'today') { // 今天
-            date.setDate(date.getDate());
-        }
-        //获取年份 ?
-        var Y = date.getFullYear();
-        //获取月份 ?
-        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
-        //获取当日日期?
-        var D = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
-
-        var H = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
-
-        var Min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-
-        var S = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
-        let todayDate = Y + '-' + M + '-' + D + ' ' + H + ':' + Min + ':' + S;
-        return todayDate
-    }
-  },
-  watch() {
-    isOk: {
-      handler: (newName, oldName) => {
-        emitter.emit("isSet", newName);
-      };
-    }
-  },
-  mounted() {
-    let qr =this.generQR()
-    qr.class = 'qr';
-    let root = document.getElementById("qr");
-    root.appendChild(qr);
-    const self = this;
-    $(".container").on("touchstart", (e) => {
-      e.preventDefault();
-      let hasOne = -1;
-      for (let i = 0; i < self.twoFingers.length; i++) {
-        if (!self.twoFingers[i]) {
-          self.twoFingers[i] = true;
-          hasOne = i;
-          break;
-        }
-      }
-      // 所有的指纹都用上了
-      if (hasOne == -1) {
-        console.log("return");
-        return;
-      }
-      console.log("ye");
-      // self.posMap[e.changedTouches[0].identifier] = hasOne;
-      self.posMap[e.changedTouches[0].identifier] = hasOne;
-      self.time[e.changedTouches[0].identifier] = new Date().getTime();
-      self.text =
-        e.changedTouches[0].radiusX +
-        ":" +
-        e.changedTouches[0].radiusY +
-        ":" +
-        e.changedTouches[0].rotationAngle;
-      let $finger = $("#f" + (hasOne + 1));
-      // let left = $(".paper").css('margin-left')
-      // let top = $(".paper").css('margin-top')
-      $finger.css("top", e.changedTouches[0].clientY - 40);
-      $finger.css("left", e.changedTouches[0].clientX - 50);
-      $finger.show();
-      emitter.emit("fingerStart", hasOne + 1);
-      if (hasOne >= 1) {
-        self.isOk = true;
-        setTimeout(() => {
-          emitter.emit("isSet", true);
-        }, 1500);
-      }
-    });
-
-    $(".container").on("touchend", (e) => {
-      e.preventDefault();
-      console.log("no");
-      let index = self.posMap[e.changedTouches[0].identifier];
-      let lastTime = self.time[e.changedTouches[0].identifier];
-      let curTime = new Date().getTime();
-      if (index != undefined && index != -1 && curTime - lastTime < 500) {
-        self.twoFingers[index] = false;
-        delete self.posMap[e.changedTouches[0].identifier];
-        delete self.time[e.changedTouches[0].identifier];
-        let $finger = $("#f" + (index + 1));
-        $finger.css("top", 0);
-        $finger.css("left", 0);
-        $finger.hide();
-      }
-    });
-  },
-};
+  $(".envelope-wrapper .close-icon").click(() => {
+      $('.envelope-wrapper').removeClass('flap')
+  });
+}); 
+  }
+}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style  >
-.container {
+<style >
+.bg-wrapper {
   height: 100vh;
-  width: 100%;
-  z-index: 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #444;
 }
-
-.finger-prints {
-  width: 100px;
+.bg-wrapper .envelope-wrapper {
+  background: #B4D2EE;
+}
+.bg-wrapper .envelope-wrapper .envelope {
+  position: relative;
+  width: 150px;
   height: 100px;
-  position: absolute;
-  z-index: 10;
 }
-
-@import url(https://fonts.googleapis.com/css?family=Indie+Flower);
-
-.paper {
-  -webkit-transition: opacity 0.9s linear;
-  -moz-transition: opacity 0.9s linear;
-  -o-transition: opacity 0.9s linear;
-  transition: opacity 0.9s linear;
-  opacity: 1;
-  filter: alpha(opacity=0);
+.bg-wrapper .envelope-wrapper .envelope:before {
+  content: "";
   position: absolute;
-  height: 600px;
-  width: 800px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0px 0px 5px 0px #888;
-  left: 50%;
+  top: 0px;
+  z-index: 2;
+  border-top: 55px solid #D3EAFD;
+  border-right: 75px solid transparent;
+  border-left: 75px solid transparent;
+  transform-origin: top;
+  transition: all 0.5s ease-in-out 0.7s;
+}
+.bg-wrapper .envelope-wrapper .envelope:after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 0px;
+  height: 0px;
+  border-top: 50px solid transparent;
+  border-right: 75px solid #B4D2EE;
+  border-bottom: 50px solid #B4D2EE;
+  border-left: 75px solid #B4D2EE;
+}
+.bg-wrapper .envelope-wrapper .envelope .card {
+  position: absolute;
+  right: 20%;
+  bottom: 0;
+  width: 60%;
+  height: 90%;
+  background: #FFF;
+  text-align: center;
+  transition: all 1s ease-in-out;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.bg-wrapper .envelope-wrapper .envelope .card .close-icon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 10px;
+  color: rgba(68, 68, 68, 0.7);
+  cursor: pointer;
+}
+.bg-wrapper .envelope-wrapper .envelope .card .text {
+  position: absolute;
   top: 50%;
-  margin: -300px 0 0 -400px;
+  left: 50%;
+  font-family: "Great Vibes", cursive;
+  color: #C51803;
+  transform: translate(-50%, -50%);
 }
-
-/* .text {
+.bg-wrapper .envelope-wrapper .heart {
   position: absolute;
-  top: 65px;
-  left: 55px;
-  bottom: 10px;
-  right: 10px;
-  line-height: 25px;
-  font-family: "Indie Flower";
-  overflow: hidden;
-  outline: none;
-} */
-
-.fadeIn {
-  opacity: 100;
-  filter: alpha(opacity=1);
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  background: #C51803;
+  z-index: 4;
+  transform: translate(-50%, -20%) rotate(45deg);
+  transition: transform 0.5s ease-in-out 1s;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
 }
-
-.love-img {
-  margin: 0 auto;
-  width: 480px;
-  height: 300px;
-  box-shadow: 0px 0px 5px 0px #888;
-  margin-left: 150px;
-  margin-top: 50px;
-  display: block;
-}
-
-.word {
-  margin-left: 110px;
-  margin-top: 0px;
-  width: 400px;
-  height: 84px;
-}
-
-.code {
+.bg-wrapper .envelope-wrapper .heart:before, .bg-wrapper .envelope-wrapper .heart:after {
+  content: "";
   position: absolute;
-  top: 450px;
-  right: 170px;
-  width: 80px;
-  height: 80px;
+  width: 15px;
+  height: 15px;
+  background-color: #C51803;
+  border-radius: 50%;
 }
-
-.date {
-  margin-top: -30px;
-  margin-left: 495px;
+.bg-wrapper .envelope-wrapper .heart:before {
+  top: -7.5px;
 }
-
-.shu {
-  color: white;
-  position: absolute;
-  top: 70px;
-  width: 16px;
-  border-left: 1px solid white;
-  font-weight: bold;
-  font-size: medium;
+.bg-wrapper .envelope-wrapper .heart:after {
+  right: 7.5px;
 }
-
-.one {
-  right: 190px;
+.bg-wrapper .flap .envelope:before {
+  transform: rotateX(180deg);
+  z-index: 0;
 }
-
-.two {
-  right: 215px;
+.bg-wrapper .flap .envelope .card {
+  bottom: 100px;
+  transform: scale(1.5);
+  transition-delay: 1s;
 }
-
-.three {
-  right: 240px;
-}
-
-#qr {
-  position: absolute;
-  width: 80px ;
-  height: 80px;
-    top: 450px;
-  right: 170px;
-}
-
-#qr svg {
-  width: 80px ;
-  height: 80px;
-}
-
-.qrlove {
-  position: absolute;
-    top: 475px;
-  right: 195px;
-  width: 30px;
+.bg-wrapper .flap .heart {
+  transform: rotate(90deg);
+  transition-delay: 0.4s;
 }
 </style>
