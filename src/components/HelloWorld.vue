@@ -1,32 +1,38 @@
 <template>
- <div class="bg-wrapper">
-  <div class="envelope-wrapper">
-   <div class="envelope">
-      <div class="card">
-        <span class="fa fa-close close-icon"></span>
-        <div class="text">Love.</div>
+  <div class="bg-wrapper">
+    <div class="envelope-wrapper">
+      <div class="envelope">
+        <div class="card" @click="onclick">
+          <span class="fa fa-close close-icon"></span>
+          <div class="text">The first anniversary of our Marriage.</div>
+        </div>
       </div>
+      <div class="heart"></div>
     </div>
-    <div class="heart"></div>
   </div>
-</div>   
 </template>
 
 <script>
-import * as $ from 'jquery';
+import * as $ from "jquery";
+import {router} from '../main'
 export default {
   mounted: () => {
-    $( document ).ready(() => {
-    $(".envelope-wrapper .heart").click(() => {
-      $('.envelope-wrapper').addClass('flap')
-  });
+    $(document).ready(() => {
+      $(".envelope-wrapper .heart").click(() => {
+        $(".envelope-wrapper").addClass("flap");
+      });
 
-  $(".envelope-wrapper .close-icon").click(() => {
-      $('.envelope-wrapper').removeClass('flap')
-  });
-}); 
+      $(".envelope-wrapper .close-icon").click(() => {
+        $(".envelope-wrapper").removeClass("flap");
+      });
+    });
+  },
+  methods: {
+    onclick : () => {
+      router.push('painting')
+    }
   }
-}
+};
 </script>
 
 <style >
@@ -38,7 +44,7 @@ export default {
   background: #444;
 }
 .bg-wrapper .envelope-wrapper {
-  background: #B4D2EE;
+  background: #b4d2ee;
 }
 .bg-wrapper .envelope-wrapper .envelope {
   position: relative;
@@ -50,7 +56,7 @@ export default {
   position: absolute;
   top: 0px;
   z-index: 2;
-  border-top: 55px solid #D3EAFD;
+  border-top: 55px solid #d3eafd;
   border-right: 75px solid transparent;
   border-left: 75px solid transparent;
   transform-origin: top;
@@ -63,9 +69,9 @@ export default {
   width: 0px;
   height: 0px;
   border-top: 50px solid transparent;
-  border-right: 75px solid #B4D2EE;
-  border-bottom: 50px solid #B4D2EE;
-  border-left: 75px solid #B4D2EE;
+  border-right: 75px solid #b4d2ee;
+  border-bottom: 50px solid #b4d2ee;
+  border-left: 75px solid #b4d2ee;
 }
 .bg-wrapper .envelope-wrapper .envelope .card {
   position: absolute;
@@ -73,7 +79,7 @@ export default {
   bottom: 0;
   width: 60%;
   height: 90%;
-  background: #FFF;
+  background: #fff;
   text-align: center;
   transition: all 1s ease-in-out;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -91,7 +97,7 @@ export default {
   top: 50%;
   left: 50%;
   font-family: "Great Vibes", cursive;
-  color: #C51803;
+  color: #c51803;
   transform: translate(-50%, -50%);
 }
 .bg-wrapper .envelope-wrapper .heart {
@@ -100,19 +106,20 @@ export default {
   left: 50%;
   width: 15px;
   height: 15px;
-  background: #C51803;
+  background: #c51803;
   z-index: 4;
   transform: translate(-50%, -20%) rotate(45deg);
   transition: transform 0.5s ease-in-out 1s;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
   cursor: pointer;
 }
-.bg-wrapper .envelope-wrapper .heart:before, .bg-wrapper .envelope-wrapper .heart:after {
+.bg-wrapper .envelope-wrapper .heart:before,
+.bg-wrapper .envelope-wrapper .heart:after {
   content: "";
   position: absolute;
   width: 15px;
   height: 15px;
-  background-color: #C51803;
+  background-color: #c51803;
   border-radius: 50%;
 }
 .bg-wrapper .envelope-wrapper .heart:before {
