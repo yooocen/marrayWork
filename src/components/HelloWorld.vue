@@ -4,7 +4,7 @@
       <div class="envelope">
         <div class="card" @click="onclick">
           <span class="fa fa-close close-icon"></span>
-          <div class="text">The first anniversary of our Marriage.</div>
+          <div class="text">亲爱的老婆<br>结婚一周年快乐</div>
         </div>
       </div>
       <div class="heart"></div>
@@ -41,24 +41,24 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #444;
+  background: #c4c4c3;
 }
 .bg-wrapper .envelope-wrapper {
   background: #b4d2ee;
 }
 .bg-wrapper .envelope-wrapper .envelope {
   position: relative;
-  width: 150px;
-  height: 100px;
+  width: 525px;
+  height: 350px;
 }
 .bg-wrapper .envelope-wrapper .envelope:before {
   content: "";
   position: absolute;
   top: 0px;
   z-index: 2;
-  border-top: 55px solid #d3eafd;
-  border-right: 75px solid transparent;
-  border-left: 75px solid transparent;
+  border-top: 192.5px solid #d3eafd;
+  border-right: 262.5px solid transparent;
+  border-left: 262.5px solid transparent;
   transform-origin: top;
   transition: all 0.5s ease-in-out 0.7s;
 }
@@ -68,10 +68,10 @@ export default {
   z-index: 2;
   width: 0px;
   height: 0px;
-  border-top: 50px solid transparent;
-  border-right: 75px solid #b4d2ee;
-  border-bottom: 50px solid #b4d2ee;
-  border-left: 75px solid #b4d2ee;
+  border-top: 175px solid transparent;
+  border-right: 262.5px solid #b4d2ee;
+  border-bottom: 175px solid #b4d2ee;
+  border-left: 262.5px solid #b4d2ee;
 }
 .bg-wrapper .envelope-wrapper .envelope .card {
   position: absolute;
@@ -94,7 +94,7 @@ export default {
 }
 .bg-wrapper .envelope-wrapper .envelope .card .text {
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
   font-family: "Great Vibes", cursive;
   color: #c51803;
@@ -102,10 +102,10 @@ export default {
 }
 .bg-wrapper .envelope-wrapper .heart {
   position: absolute;
-  top: 50%;
+  top: 53%;
   left: 50%;
-  width: 15px;
-  height: 15px;
+  width: 52.5px;
+  height: 52.5px;
   background: #c51803;
   z-index: 4;
   transform: translate(-50%, -20%) rotate(45deg);
@@ -117,16 +117,16 @@ export default {
 .bg-wrapper .envelope-wrapper .heart:after {
   content: "";
   position: absolute;
-  width: 15px;
-  height: 15px;
+  width: 52.5px;
+  height: 52.5px;
   background-color: #c51803;
   border-radius: 50%;
 }
 .bg-wrapper .envelope-wrapper .heart:before {
-  top: -7.5px;
+  top: -26.25px;
 }
 .bg-wrapper .envelope-wrapper .heart:after {
-  right: 7.5px;
+  right: 26.25px;
 }
 .bg-wrapper .flap .envelope:before {
   transform: rotateX(180deg);
